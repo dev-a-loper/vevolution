@@ -7,8 +7,8 @@ This file is the single source of truth for two things that must never silently 
    must keep passing after any change to go2v. See `CLAUDE.md` → "Three-tier success
    criteria".
 
-When a conversion lands in the passing set, add it here. When you change go2v, re-run
-every package in the passing set before considering the upgrade done.
+When a conversion lands in the passing set, change its status to 🟢 and add a row to the
+matrix. When you change go2v, re-run every 🟢 package before considering the upgrade done.
 
 ## Status legend
 
@@ -17,27 +17,39 @@ every package in the passing set before considering the upgrade done.
 - 🔴 **blocked** — needs a go2v feature/fix tracked in `v/go2v/todo.txt`.
 - ⚪ **queued** — submodule added, not yet translated.
 
+## Directory convention
+
+```
+packages/<name>/
+  go/      read-only submodule → the ORIGINAL upstream Go library (do not edit)
+  go2v/    the V translation, hosted in THIS repo (edit, commit, own)
+```
+
+`<name>` is a short alias. The table below maps each alias to its upstream import path.
+Submodule URLs: the `dev-a-loper` forks (`v/vlang`, `v/go2v`) use SSH (owner pushes);
+upstream `packages/*/go` references use SSH for cloning too. Anyone forking `vevolution`
+gets all submodules with `git clone --recurse-submodules`.
+
 ## Passing set (go2v regression matrix)
 
-| Package | Original (Go) | V translation | Status | Notes |
-|---------|---------------|---------------|--------|-------|
-| _(none yet)_ | | | | |
+| Alias | Upstream | Status | Tests | Notes |
+|-------|----------|--------|-------|-------|
+| _(none passing yet)_ | | | | |
 
-Re-validate this entire table with `cd packages/<pkg>/go2v && v test .` for each 🟢 row
-after every go2v change.
+## All packages
 
-## Candidate packages (zero-dependency, small–medium, broadly useful)
+| Alias | Upstream import path | Status |
+|-------|----------------------|--------|
+| humanize | github.com/dustin/go-humanize | ⚪ queued |
+| semver | github.com/blang/semver/v4 | ⚪ queued |
+| glob | github.com/gobwas/glob | ⚪ queued |
+| ulid | github.com/oklog/ulid/v2 | ⚪ queued |
+| orderedmap | github.com/elliotchance/orderedmap | ⚪ queued |
+| stripansi | github.com/acarl005/stripansi | ⚪ queued |
+| backoff | github.com/cenkalti/backoff/v4 | ⚪ queued |
+| xstrings | github.com/huandu/xstrings | ⚪ queued |
 
-Selection criteria: useful to everyday users, **no (non-test) external dependencies**,
-small-to-medium, and a meaningful test suite to validate against.
+## Suggested first conversion
 
-Curated starters (to be confirmed/added as submodules under `packages/<name>/go`):
-
-- `dustin/go-humanize` — human-readable bytes/times/si units (tiny, zero-dep)
-- `blang/semver` — semantic version parsing (small, zero-dep)
-- `gobwas/glob` — glob pattern matching (small, zero-dep)
-- `oklog/ulid` — ULID generation (small, zero-dep)
-- `elliotchance/orderedmap` — ordered map (small, zero-dep)
-- `acarl005/stripansi` — strip ANSI escape codes (tiny, zero-dep)
-- `cenkalti/backoff` — exponential backoff (small, zero-dep)
-- `huandu/xstrings` — string utilities (medium, zero-dep)
+`humanize` is the smallest with a clear test suite — a good target to validate the full
+loop (translate → hand-fix → `v test .` passes → promote to 🟢).

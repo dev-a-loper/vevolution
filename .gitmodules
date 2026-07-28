@@ -4,3 +4,27 @@
 [submodule "v/vlang"]
 	path = v/vlang
 	url = git@github.com:dev-a-loper/v.git
+[submodule "packages/humanize/go"]
+	path = packages/humanize/go
+	url = git@github.com:dustin/go-humanize.git
+[submodule "packages/semver/go"]
+	path = packages/semver/go
+	url = git@github.com:blang/semver.git
+[submodule "packages/glob/go"]
+	path = packages/glob/go
+	url = git@github.com:gobwas/glob.git
+[submodule "packages/ulid/go"]
+	path = packages/ulid/go
+	url = git@github.com:oklog/ulid.git
+[submodule "packages/orderedmap/go"]
+	path = packages/orderedmap/go
+	url = git@github.com:elliotchance/orderedmap.git
+[submodule "packages/stripansi/go"]
+	path = packages/stripansi/go
+	url = git@github.com:acarl005/stripansi.git
+[submodule "packages/backoff/go"]
+	path = packages/backoff/go
+	url = git@github.com:cenkalti/backoff.git
+[submodule "packages/xstrings/go"]
+	path = packages/xstrings/go
+	url = git@github.com:huandu/xstrings.git
