@@ -1,0 +1,6 @@
+[submodule "v/go2v"]
+	path = v/go2v
+	url = git@github.com:dev-a-loper/go2v.git
+[submodule "v/vlang"]
+	path = v/vlang
+	url = git@github.com:dev-a-loper/v.git
