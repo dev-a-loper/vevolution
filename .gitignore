@@ -1,0 +1,15 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+._*
+
+# V build artifacts / binaries
+*.exe
+v/go2v/go2v
+
+# Go: never built at top level, but ignore stray artifacts just in case
+*.test
+*.out
