@@ -86,6 +86,7 @@ cd packages/<pkg>/go && go test ./...       # compare against upstream Go behavi
 
 # --- after any change to go2v, re-validate the regression set ---
 # run `v test .` in v/go2v AND in every packages/*/go2v that is currently "passing"
+./scripts/check_conversions.sh          # automates the above sweep (tier-3 check)
 ```
 
 When iterating on go2v, run its self-tests first; once green, sweep all passing
