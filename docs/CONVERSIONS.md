@@ -35,6 +35,7 @@ gets all submodules with `git clone --recurse-submodules`.
 | Alias | Upstream | Status | Tests | Notes |
 |-------|----------|--------|-------|-------|
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing | 15 fn / all pass | V port of v3; insertion order backed by `order []K` + map (not the Go linked list); Go `iter.Seq` → V slices |
+| stripansi* | github.com/acarl005/stripansi | 🟢 passing* | 8 fn / all pass | No upstream test suite exists — tests are author-written. V regex engine can't match the Go ansi regex, so it's a hand-written byte scanner (CSI/OSC). `\*` = not validated against an upstream suite. |
 
 ## All packages
 
@@ -45,7 +46,7 @@ gets all submodules with `git clone --recurse-submodules`.
 | glob | github.com/gobwas/glob | 🟡 wip (subagent) |
 | ulid | github.com/oklog/ulid/v2 | 🟡 wip (subagent) |
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing |
-| stripansi | github.com/acarl005/stripansi | 🔴 blocked |
+| stripansi | github.com/acarl005/stripansi | 🟢 passing* |
 | backoff | github.com/cenkalti/backoff/v4 | 🟡 wip (subagent) |
 | xstrings | github.com/huandu/xstrings | 🟡 wip (subagent) |
 
