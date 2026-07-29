@@ -34,7 +34,7 @@ gets all submodules with `git clone --recurse-submodules`.
 
 | Alias | Upstream | Status | Tests | Notes |
 |-------|----------|--------|-------|-------|
-| _(none passing yet)_ | | | | |
+| orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing | 15 fn / all pass | V port of v3; insertion order backed by `order []K` + map (not the Go linked list); Go `iter.Seq` → V slices |
 
 ## All packages
 
@@ -44,7 +44,7 @@ gets all submodules with `git clone --recurse-submodules`.
 | semver | github.com/blang/semver/v4 | ⚪ queued |
 | glob | github.com/gobwas/glob | ⚪ queued |
 | ulid | github.com/oklog/ulid/v2 | ⚪ queued |
-| orderedmap | github.com/elliotchance/orderedmap | ⚪ queued |
+| orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing |
 | stripansi | github.com/acarl005/stripansi | ⚪ queued |
 | backoff | github.com/cenkalti/backoff/v4 | ⚪ queued |
 | xstrings | github.com/huandu/xstrings | ⚪ queued |

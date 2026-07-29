@@ -73,6 +73,26 @@ clean V — do not try to preserve go2v's broken output line-by-line.
 - **const with `iota`/bit-shifts:** V consts must be compile-time constant; `1 << (i*10)`
   is fine if `i` is a literal. Spell each value out rather than relying on `iota`.
 
+## V generics (verified — needed for orderedmap, etc.)
+
+- **Generic param names MUST be a single capital letter** (`[K, V]`, `[T]`). Multi-letter
+  param names are rejected. Conversely, **single capital letters are reserved**, so a
+  struct/function/variable name must NOT be a single capital letter (e.g. `OrderedMap` ok,
+  `M` not ok).
+- **Generic map keys work:** `struct Foo[K, V] { mut: kv map[K]V; order []K }`, `k in m.kv`,
+  `m.kv[k] = v`, generic instantiation `foo[string, int]()`.
+- **Comma-ok `(V, bool)` with a generic `V`:** you can't construct a generic zero for the
+  "absent" case, so use an option `?V` and return `none`. Caller: `v := m.get(k) or { ... }`
+  or `if v := m.get(k) { } else { }`.
+- **Pointer-valued maps** (`map[K]&T`): accessing a key returns an option, but to return
+  `none` for a missing key you MUST use an explicit `or` block — `el := m.kv[key] or { return none }`.
+  A bare `return m.kv[key]` warns ("accessing a pointer map value requires an `or {}` block")
+  and may not propagate `none` correctly.
+- **`array.index(x)` returns a plain `int`** (-1 if not found), NOT an option — don't use
+  `or` on it.
+- **`array.filter(it == x)`** is the V idiom; **`map.delete(key)`** removes a key; **`m.kv.len`**
+  is the entry count.
+
 ## Step 3 — Verify
 
 ```bash
