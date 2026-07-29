@@ -64,7 +64,15 @@ gets all submodules with `git clone --recurse-submodules`.
 | backoff | github.com/cenkalti/backoff/v4 | 🟢 passing |
 | xstrings | github.com/huandu/xstrings | 🟢 passing |
 
-## Suggested first conversion
+## Next steps
 
-`humanize` is the smallest with a clear test suite — a good target to validate the full
-loop (translate → hand-fix → `v test .` passes → promote to 🟢).
+- **Close go2v gaps** — `docs/GO2V_GAPS.md` lists ~46 go2v/V gaps (numbering is messy from
+  parallel subagent appends; the content is the worklist). Highest-leverage: `fmt.Sprintf`
+  format strings, `(T,error)`→`!T`, anonymous-struct table tests, and the `testing` API.
+  After each go2v change, run `./scripts/check_conversions.sh` (tier-3) to confirm no green
+  package regressed.
+- **Promote humanize 🟡→🟢** when V's stdlib can format subnormal f64 and fold the
+  `time.Unix(maxint64,maxint64)` overflow (the 3 failing tests are V-stdlib blockers, not
+  port bugs).
+- **Add more packages** under `packages/<name>/` (zero-dep, small-medium, useful) and port
+  them with `docs/PLAYBOOK.md`.
