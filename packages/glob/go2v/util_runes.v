@@ -1,10 +1,10 @@
 module glob
 
-// Port of gobwas/glob/util/runes — rune-slice helpers used by the compiler
+// Port of gobwas/glob/util/runes -- rune-slice helpers used by the compiler
 // and matchers. Operates on []rune (V `[]rune`).
 
 // runes_index returns the index of the first instance of needle in s, or -1.
-pub fn runes_index(s []rune, needle []rune) int {
+fn runes_index(s []rune, needle []rune) int {
 	ls, ln := s.len, needle.len
 	if ln == 0 {
 		return 0
@@ -41,7 +41,7 @@ pub fn runes_index(s []rune, needle []rune) int {
 }
 
 // runes_last_index returns the index of the last instance of needle in s, or -1.
-pub fn runes_last_index(s []rune, needle []rune) int {
+fn runes_last_index(s []rune, needle []rune) int {
 	ls, ln := s.len, needle.len
 	if ln == 0 {
 		if ls == 0 {
@@ -82,7 +82,7 @@ pub fn runes_last_index(s []rune, needle []rune) int {
 
 // runes_index_any returns the index of the first instance of any rune from
 // chars in s, or -1.
-pub fn runes_index_any(s []rune, chars []rune) int {
+fn runes_index_any(s []rune, chars []rune) int {
 	if chars.len > 0 {
 		mut i := 0
 		for c in s {
@@ -99,12 +99,12 @@ pub fn runes_index_any(s []rune, chars []rune) int {
 }
 
 // runes_contains reports whether needle is present in s.
-pub fn runes_contains(s []rune, needle []rune) bool {
+fn runes_contains(s []rune, needle []rune) bool {
 	return runes_index(s, needle) >= 0
 }
 
 // runes_max returns the highest rune in s.
-pub fn runes_max(s []rune) rune {
+fn runes_max(s []rune) rune {
 	mut max := rune(0)
 	for r in s {
 		if r > max {
@@ -115,7 +115,7 @@ pub fn runes_max(s []rune) rune {
 }
 
 // runes_min returns the lowest rune in s.
-pub fn runes_min(s []rune) rune {
+fn runes_min(s []rune) rune {
 	mut min := rune(-1)
 	for r in s {
 		if min == -1 {
@@ -130,7 +130,7 @@ pub fn runes_min(s []rune) rune {
 }
 
 // runes_index_rune returns the index of the first instance of r in s, or -1.
-pub fn runes_index_rune(s []rune, r rune) int {
+fn runes_index_rune(s []rune, r rune) int {
 	mut i := 0
 	for c in s {
 		if c == r {
@@ -142,7 +142,7 @@ pub fn runes_index_rune(s []rune, r rune) int {
 }
 
 // runes_index_last_rune returns the index of the last instance of r in s, or -1.
-pub fn runes_index_last_rune(s []rune, r rune) int {
+fn runes_index_last_rune(s []rune, r rune) int {
 	mut i := s.len - 1
 	for i >= 0 {
 		if s[i] == r {
@@ -154,7 +154,7 @@ pub fn runes_index_last_rune(s []rune, r rune) int {
 }
 
 // runes_equal reports whether a and b are the same rune sequence.
-pub fn runes_equal(a []rune, b []rune) bool {
+fn runes_equal(a []rune, b []rune) bool {
 	if a.len != b.len {
 		return false
 	}
@@ -169,11 +169,11 @@ pub fn runes_equal(a []rune, b []rune) bool {
 }
 
 // runes_has_prefix reports whether s begins with prefix.
-pub fn runes_has_prefix(s []rune, prefix []rune) bool {
+fn runes_has_prefix(s []rune, prefix []rune) bool {
 	return s.len >= prefix.len && runes_equal(s[0..prefix.len], prefix)
 }
 
 // runes_has_suffix reports whether s ends with suffix.
-pub fn runes_has_suffix(s []rune, suffix []rune) bool {
+fn runes_has_suffix(s []rune, suffix []rune) bool {
 	return s.len >= suffix.len && runes_equal(s[s.len - suffix.len..], suffix)
 }

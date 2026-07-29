@@ -1,11 +1,11 @@
 module glob
 
-// Port of gobwas/glob/util/strings — byte-index helpers for matching.
+// Port of gobwas/glob/util/strings -- byte-index helpers for matching.
 // All return values are BYTE indices into the source string (matching Go semantics).
 
 // strings_index_any_runes returns the byte index of the first instance of any
 // rune from rs in s, or -1.
-pub fn strings_index_any_runes(s string, rs []rune) int {
+fn strings_index_any_runes(s string, rs []rune) int {
 	mut bpos := 0
 	for r in s.runes() {
 		if runes_index_rune(rs, r) != -1 {
@@ -18,7 +18,7 @@ pub fn strings_index_any_runes(s string, rs []rune) int {
 
 // strings_last_index_any_runes returns the byte index of the last instance of
 // any rune from rs in s, or -1.
-pub fn strings_last_index_any_runes(s string, rs []rune) int {
+fn strings_last_index_any_runes(s string, rs []rune) int {
 	mut last := -1
 	mut bpos := 0
 	for r in s.runes() {

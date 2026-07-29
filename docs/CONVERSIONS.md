@@ -37,6 +37,8 @@ gets all submodules with `git clone --recurse-submodules`.
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing | 15 fn / all pass | V port of v3; insertion order backed by `order []K` + map (not the Go linked list); Go `iter.Seq` → V slices |
 | stripansi* | github.com/acarl005/stripansi | 🟢 passing* | 8 fn / all pass | No upstream test suite exists — tests are author-written. V regex engine can't match the Go ansi regex, so it's a hand-written byte scanner (CSI/OSC). `\*` = not validated against an upstream suite. |
 | backoff | github.com/cenkalti/backoff/v4 | 🟢 passing | 26 fn / all pass (5 files) | Used V's `context` module (cancellation via `context.cause`). `Retry[T]` returns `Outcome[T]{value,err}` (V forbids `(T,IError)` multi-return); error-chain + closure-counter workarounds hand-built. |
+| xstrings | github.com/huandu/xstrings | 🟢 passing | 28 fn / all pass (5 files) | V has no `unicode` module — hand-rolled IsUpper/IsLower/IsPunct via `encoding.utf8` + ASCII fast paths; `rune` is unsigned so the `-1` sentinel is stored as `i32`. Deterministic `TestShuffleSource` matches Go byte-for-byte. |
+| glob* | github.com/gobwas/glob | 🟢 passing* | 83 cases / all pass (main pkg) | Go `Matcher` interface + type-switch → V sumtype; parser uses an explicit node stack (parent back-edges dropped). `\*` = main `glob_test.go` suite only (79 TestGlob + 4 TestQuoteMeta); subpackage unit tests (compiler/match/syntax/util) deferred — the integration suite already exercises the full lexer→parser→compiler→matcher pipeline. |
 
 ## All packages
 
@@ -44,12 +46,12 @@ gets all submodules with `git clone --recurse-submodules`.
 |-------|----------------------|--------|
 | humanize | github.com/dustin/go-humanize | 🟡 wip (subagent) |
 | semver | github.com/blang/semver/v4 | 🟡 wip (subagent) |
-| glob | github.com/gobwas/glob | 🟡 wip (subagent) |
+| glob | github.com/gobwas/glob | 🟢 passing* |
 | ulid | github.com/oklog/ulid/v2 | 🟡 wip (subagent) |
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing |
 | stripansi | github.com/acarl005/stripansi | 🟢 passing* |
 | backoff | github.com/cenkalti/backoff/v4 | 🟢 passing |
-| xstrings | github.com/huandu/xstrings | 🟡 wip (subagent) |
+| xstrings | github.com/huandu/xstrings | 🟢 passing |
 
 ## Suggested first conversion
 
