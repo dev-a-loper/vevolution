@@ -60,6 +60,11 @@ Verified on go2v @ `20f11cd` (master), translating `dustin/go-humanize` and prob
 - `math/big`: `big.Int` method mapping to V's `math.big` (V has `big.Int` but **no
   `big.Float`** — `BigCommaf` will need an alternate approach or a V big.Float).
 - `regexp`: Go `regexp` → V `regex` API mapping (compile, FindStringSubmatch, ReplaceAllString).
+  - **Verified limitation:** V's `regex` engine (a custom engine, not RE2) **could not match**
+    the `acarl005/stripansi` ansi pattern — it compiled via `regex.regex_opt` but `replace`
+    produced no changes. Likely missing support for non-capturing groups `(?:...)`, bounded
+    quantifiers `{1,4}`, or char-class ranges used in that pattern. Packages relying on
+    non-trivial regex (stripansi, semver, si.ParseSI) may need hand-written scanners instead.
 - `init()` functions (e.g. regex compilation at startup).
 - `context.Context` (used by `cenkalti/backoff`) — no direct V equivalent; likely blocks.
 - `database/sql/driver` (Scanner/Valuer, used by `oklog/ulid`) — no direct V equivalent.

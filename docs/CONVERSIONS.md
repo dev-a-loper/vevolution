@@ -40,14 +40,14 @@ gets all submodules with `git clone --recurse-submodules`.
 
 | Alias | Upstream import path | Status |
 |-------|----------------------|--------|
-| humanize | github.com/dustin/go-humanize | ⚪ queued |
-| semver | github.com/blang/semver/v4 | ⚪ queued |
-| glob | github.com/gobwas/glob | ⚪ queued |
-| ulid | github.com/oklog/ulid/v2 | ⚪ queued |
+| humanize | github.com/dustin/go-humanize | 🟡 wip (subagent) |
+| semver | github.com/blang/semver/v4 | 🟡 wip (subagent) |
+| glob | github.com/gobwas/glob | 🟡 wip (subagent) |
+| ulid | github.com/oklog/ulid/v2 | 🟡 wip (subagent) |
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing |
-| stripansi | github.com/acarl005/stripansi | ⚪ queued |
-| backoff | github.com/cenkalti/backoff/v4 | ⚪ queued |
-| xstrings | github.com/huandu/xstrings | ⚪ queued |
+| stripansi | github.com/acarl005/stripansi | 🔴 blocked |
+| backoff | github.com/cenkalti/backoff/v4 | 🟡 wip (subagent) |
+| xstrings | github.com/huandu/xstrings | 🟡 wip (subagent) |
 
 ## Suggested first conversion
 
