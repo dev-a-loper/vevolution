@@ -41,11 +41,20 @@ gets all submodules with `git clone --recurse-submodules`.
 | glob* | github.com/gobwas/glob | 🟢 passing* | 83 cases / all pass (main pkg) | Go `Matcher` interface + type-switch → V sumtype; parser uses an explicit node stack (parent back-edges dropped). `\*` = main `glob_test.go` suite only (79 TestGlob + 4 TestQuoteMeta); subpackage unit tests (compiler/match/syntax/util) deferred — the integration suite already exercises the full lexer→parser→compiler→matcher pipeline. |
 | semver | github.com/blang/semver/v4 | 🟢 passing | 37 fn / all pass (5 files) | 1:1 mirror of all 37 Go Test functions (submodule's v4/ is a duplicate). `MustParse` panic tests run a throwaway binary in a subprocess (V has no recover); JSON done dependency-free (json2 is experimental); SQL Scan modeled with a sum type. |
 
+## Partial (not in the passing set yet)
+
+- **humanize** — 🟡 29/32 test functions pass. The 3 failures are V-stdlib limitations, kept
+  as failing regression detectors (not port bugs):
+  1. `test_commaf_subnormal_gap` — V `strconv` returns `"0"` for subnormal f64 (mantissa lost); Go emits the full subnormal decimal expansion.
+  2. `test_big_commaf_subnormal_gap` — same subnormal limitation.
+  3. `test_range` — Go's `time.Unix(maxint64, maxint64)` folds the nsec overflow into a negative seconds value (so it labels "from now"); V's `time` doesn't overflow and yields the logically-correct "ago". The `RelTime` logic is identical.
+  Everything else (bytes, Comma/Commaf, ftoa, ordinals, ComputeSI/SI, FormatFloat, big bytes, big comma via `math.big`) passes, including shortest-float approximation verified against all Go test values.
+
 ## All packages
 
 | Alias | Upstream import path | Status |
 |-------|----------------------|--------|
-| humanize | github.com/dustin/go-humanize | 🟡 wip (subagent) |
+| humanize | github.com/dustin/go-humanize | 🟡 partial |
 | semver | github.com/blang/semver/v4 | 🟢 passing |
 | glob | github.com/gobwas/glob | 🟢 passing* |
 | ulid | github.com/oklog/ulid/v2 | 🟡 wip (subagent) |
