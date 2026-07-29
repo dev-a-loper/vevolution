@@ -39,13 +39,14 @@ gets all submodules with `git clone --recurse-submodules`.
 | backoff | github.com/cenkalti/backoff/v4 | 🟢 passing | 26 fn / all pass (5 files) | Used V's `context` module (cancellation via `context.cause`). `Retry[T]` returns `Outcome[T]{value,err}` (V forbids `(T,IError)` multi-return); error-chain + closure-counter workarounds hand-built. |
 | xstrings | github.com/huandu/xstrings | 🟢 passing | 28 fn / all pass (5 files) | V has no `unicode` module — hand-rolled IsUpper/IsLower/IsPunct via `encoding.utf8` + ASCII fast paths; `rune` is unsigned so the `-1` sentinel is stored as `i32`. Deterministic `TestShuffleSource` matches Go byte-for-byte. |
 | glob* | github.com/gobwas/glob | 🟢 passing* | 83 cases / all pass (main pkg) | Go `Matcher` interface + type-switch → V sumtype; parser uses an explicit node stack (parent back-edges dropped). `\*` = main `glob_test.go` suite only (79 TestGlob + 4 TestQuoteMeta); subpackage unit tests (compiler/match/syntax/util) deferred — the integration suite already exercises the full lexer→parser→compiler→matcher pipeline. |
+| semver | github.com/blang/semver/v4 | 🟢 passing | 37 fn / all pass (5 files) | 1:1 mirror of all 37 Go Test functions (submodule's v4/ is a duplicate). `MustParse` panic tests run a throwaway binary in a subprocess (V has no recover); JSON done dependency-free (json2 is experimental); SQL Scan modeled with a sum type. |
 
 ## All packages
 
 | Alias | Upstream import path | Status |
 |-------|----------------------|--------|
 | humanize | github.com/dustin/go-humanize | 🟡 wip (subagent) |
-| semver | github.com/blang/semver/v4 | 🟡 wip (subagent) |
+| semver | github.com/blang/semver/v4 | 🟢 passing |
 | glob | github.com/gobwas/glob | 🟢 passing* |
 | ulid | github.com/oklog/ulid/v2 | 🟡 wip (subagent) |
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing |
