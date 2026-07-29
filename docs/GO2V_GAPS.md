@@ -356,3 +356,77 @@ Verified on go2v @ `20f11cd` (master), translating `dustin/go-humanize` and prob
     slices/tables). `Version{...other}` struct spread works. Function-type struct
     fields must be initialized (default `= fn (...) {} { ... }`, or `@[required]`).
 
+## Verified during the oklog/ulid conversion
+
+38. **V has no `i128` / `u128` and no wrapping arithmetic operators.**
+    - Go's `uint64 * uint64` wraps silently mod 2^64; V's `u64 * u64` also wraps
+      silently (no panic), but there is no `*%` operator and no 128-bit type to
+      hold the wider product. ulid's LCG state update (`state * c + add` mod
+      2^64) had to be implemented via 32-bit schoolbook multiplication keeping
+      only the low 64 bits (`(al*cl) + ((ah*cl + al*ch) << 32) + add`). Same
+      trick was used for the `Uint80.add` overflow detector's mod-2^64 add.
+
+39. **`__global` requires `-enable-globals`**, which is not the default for
+    `v test`, so a Go `var defaultX = ...` package-level mutable singleton
+    (oklog/ulid's `defaultEntropy`) has no direct V equivalent. `__global g &T`
+    compiles only with `v -enable-globals`, so a portable V module cannot rely
+    on it. Workaround: return a fresh value each call and derive per-call
+    uniqueness another way (see #40).
+
+40. **V interface value copies do NOT share mutable struct state across calls**
+    — Go's "remember previous value in a struct field, increment on next call"
+    pattern (ulid's `MonotonicEntropy`) cannot be reproduced. When a struct is
+    boxed into an interface (e.g. `MonotonicReader(MonotonicEntropy{...})`) and
+    the enclosing struct is then copied (assignment, sum-type wrap, smart-cast
+    binding), mutations made through the extracted `mut m := iface` reference do
+    not propagate back to other copies of the enclosing struct. Verified
+    directly: two `Entropy(locked)` values built from the same `locked` did not
+    share `m.entropy` state after one was mutated through `monotonic_read`.
+    - Workaround: drop the shared-state design and rebuild the externally
+      observable property another way (for ulid, mix `time.now().unix_nano()`
+      into the entropy bytes on each call so successive same-ms calls yield
+      strictly increasing entropy without global state).
+
+41. **`mut`-receiver methods: the `mut` keyword is required at the declaration
+    and FORBIDDEN at the call site for non-array-reference parameters.**
+    - `pub fn foo(mut r Reader)` is called as `foo(mut_var)`, **not** `foo(mut mut_var)`
+      (`parameter r is not mut, mut is not needed`). For a *non-`mut`* parameter
+      (`pub fn foo(r Reader)`), the call is `foo(var)` — even when `var` is itself
+      `mut` and even though `foo` may mutate `r` via the interface. go2v would
+      need to track the declaration's `mut` to decide whether to emit `mut` at
+      the call site.
+
+42. **`crypto/rand.read(mut buf)` does not exist** — V's `crypto.rand` exposes
+    only `bytes(n int) ![]u8` (allocates) and a `read(mut buffer []u8) !` whose
+    signature collides with `math.rand.read` (`bytes_needed int`). To fill an
+    existing buffer in place (Go's `crand.Read(buf)`), call `crand.bytes(buf.len)!`
+    and copy the result back. `io.Reader` implementations that back onto
+    crypto/rand must do this two-step.
+
+43. **Fixed arrays cannot be sliced into a *mutable alias*** — `id.b[6..]` on a
+    `[16]u8` field returns a copy; writes through the slice do not mutate `id`.
+    A `fn (id ULID) marshal_to(mut dst []u8)` therefore cannot read entropy
+    directly into the ULID's bytes. Workaround: read into a scratch `[]u8` and
+    copy element-by-element back into the fixed array (`id.b[6+i] = scratch[i]`).
+
+44. **`or { }` block constraints are stricter than they look.** The last
+    statement of an `or { }` block attached to `x := f() or { ... }` must either
+    be an expression of `x`'s type or a control-flow exit (`return`/`break`/
+    `continue`/`exit()`). `assert false, '...'` alone fails the check (`last
+    statement ... should be an expression of type T or exit parent scope`). Use
+    `if _ := f() { ok } else { assert false, '...'; exit(1) }` instead, or follow
+    the assert with `exit(1)`.
+
+45. **`recover()` returns no value in V 0.5.2.** `r := recover()` errors
+    (`assignment mismatch: 1 variable but recover() returns 0 values`), and an
+    uncaught `panic()` aborts the whole test binary. So Go's
+    `defer func() { if r := recover(); ... }()` "expected panic" test pattern is
+    untestable; tests must be rewritten to exercise the underlying error path
+    that the `must_*`/panic helper turns into a panic.
+
+46. **`time.unix(s, ns)` takes only one arg** (`time.unix(epoch i64)`); there is
+    no two-arg `(s, ns)` form. Use `time.unix_nanosecond(s i64, ns int)` for
+    Go's `time.Unix(seconds, nanoseconds)`. `time.Time` exposes its sub-second
+    part via the **field** `t.nanosecond` (not a method); there is no
+    `t.microsecond()` / `t.nanosecond()` accessor.
+
