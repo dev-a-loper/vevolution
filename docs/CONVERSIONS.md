@@ -36,6 +36,7 @@ gets all submodules with `git clone --recurse-submodules`.
 |-------|----------|--------|-------|-------|
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing | 15 fn / all pass | V port of v3; insertion order backed by `order []K` + map (not the Go linked list); Go `iter.Seq` → V slices |
 | stripansi* | github.com/acarl005/stripansi | 🟢 passing* | 8 fn / all pass | No upstream test suite exists — tests are author-written. V regex engine can't match the Go ansi regex, so it's a hand-written byte scanner (CSI/OSC). `\*` = not validated against an upstream suite. |
+| backoff | github.com/cenkalti/backoff/v4 | 🟢 passing | 26 fn / all pass (5 files) | Used V's `context` module (cancellation via `context.cause`). `Retry[T]` returns `Outcome[T]{value,err}` (V forbids `(T,IError)` multi-return); error-chain + closure-counter workarounds hand-built. |
 
 ## All packages
 
@@ -47,7 +48,7 @@ gets all submodules with `git clone --recurse-submodules`.
 | ulid | github.com/oklog/ulid/v2 | 🟡 wip (subagent) |
 | orderedmap | github.com/elliotchance/orderedmap/v3 | 🟢 passing |
 | stripansi | github.com/acarl005/stripansi | 🟢 passing* |
-| backoff | github.com/cenkalti/backoff/v4 | 🟡 wip (subagent) |
+| backoff | github.com/cenkalti/backoff/v4 | 🟢 passing |
 | xstrings | github.com/huandu/xstrings | 🟡 wip (subagent) |
 
 ## Suggested first conversion
